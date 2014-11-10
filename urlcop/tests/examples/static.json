@@ -1,0 +1,5 @@
+[
+    { "method": "GET", "url": "api/agreement-cars/{agreementCarId}" },
+    { "method": "GET", "url": "api/cars/{carId}" },
+    { "method": "GET", "url": "api/cars/{carId}/events" }
+]

@@ -1,0 +1,72 @@
+﻿#!/usr/bin/env node
+
+var fs = require('fs');
+var args = process.argv.slice(2);
+
+var usage = [
+    '',
+    'Usage: urlcop [options] [file]',
+    '',
+    '  -h, --help                  Display help information',
+    '  -p, --provider <name>       Use route provider <name>.',
+    '                              Provider configuration is stored in <name>.json',
+    '  -pa, --provider-args <path> Specify path to file with arguments for provider',
+    '',
+	'Example: urlcop --provider webapi --provider-args myapp.json',
+	''
+].join('\n');
+
+var file = process.cwd();
+var provider = 'static';
+var arguments = './static.json';
+
+function requireArgument(flag) {
+    if (args.length) {
+        return args.shift();
+    } else {
+        console.error(flag + ' requires an argument');
+        process.exit(1);
+    }
+}
+
+var arg;
+while (args.length) {
+    switch (arg = args.shift()) {
+        case '-h':
+        case '--help':
+            console.log(usage);
+            process.exit();
+            break;
+        case '-p':
+        case '--provider':
+            provider = requireArgument(arg);
+            break;
+        case '-pa':
+        case '--provider-args':
+            arguments = requireArgument(arg);
+            break;
+        default:
+            file = arg;
+    }
+}
+
+var urlcop = require('./../index.js');
+var options = {
+    source: [file],
+    provider: {
+        name: 'static',
+        arguments: JSON.parse(fs.readFileSync(arguments, 'utf8'))
+    }
+};
+urlcop.run(options, function(result) {
+    result.forEach(function(item) {
+        console.log('%s: line %d, %s', item.file, item.line, 'Missing url ' + item.expression);
+    });
+
+    if (result.length > 0) {
+        console.log('\n%d error(s)', result.length);
+    }
+    else {
+        console.log('No errors');
+    }
+});

@@ -1,0 +1,18 @@
+{
+    "name": "urlcop",
+    "version": "0.0.1",
+    "description": "Validate url in source code",
+    "keywords": [ ],
+    "author": "Slawomir Rosiek <rosieks@hotmail.com>",
+    "repository": { "type": "git", "url": "git://github.com/rosieks/urlcop.git" },
+    "dependencies": {
+        "edge": "~0.9.3",
+        "async": "~0.9.0"
+    },
+    "devDependencies": {
+        "mocha": "*",
+        "should": "*"
+    },
+    "main": "index",
+    "bin": { "urlcop": "./bin/urlcop" }
+}
